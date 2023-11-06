@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 const mongoClient = require("./mongoClient");
 const articleRoutes = require("./routes/articleRoutes");
 const bloodRequestRoute = require("./routes/bloodRequest");
+const userRoutes = require("./routes/userRoutes");
 
 //middleware
 app.use(cors());
@@ -19,6 +20,7 @@ async function run() {
 
     app.use("/", articleRoutes);
     app.use("/", bloodRequestRoute);
+    app.use("/", userRoutes);
 
     await mongoClient.client.db("admin").command({ ping: 1 });
     console.log(
