@@ -32,4 +32,23 @@ router.delete("/blood_request/:id", async (req, res) => {
   res.send(deletedBlood);
 });
 
+router.put("/blood_request/:id", async (req, res) => {
+  const blood = req.body;
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedBlood = {
+    $set: {
+      ...blood,
+    },
+  };
+
+  const result = await bloodRequestCollections.updateOne(
+    filter,
+    updatedBlood,
+    options
+  );
+  res.send(result);
+});
+
 module.exports = router;
