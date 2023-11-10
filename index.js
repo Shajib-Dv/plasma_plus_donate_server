@@ -9,6 +9,7 @@ const mongoClient = require("./mongoClient");
 const articleRoutes = require("./routes/articleRoutes");
 const bloodRequestRoute = require("./routes/bloodRequest");
 const userRoutes = require("./routes/userRoutes");
+const donors = require("./routes/donors");
 
 //middleware
 app.use(cors());
@@ -21,6 +22,7 @@ async function run() {
     app.use("/", articleRoutes);
     app.use("/", bloodRequestRoute);
     app.use("/", userRoutes);
+    app.use("/", donors);
 
     await mongoClient.client.db("admin").command({ ping: 1 });
     console.log(
