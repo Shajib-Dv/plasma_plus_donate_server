@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const mongoClient = require("../mongoClient");
 const { ObjectId } = require("mongodb");
+const cron = require("node-cron");
 const getDifferenceOfDate = require("../utils/getDifferenceOfDate");
 
 const donorsCollection = mongoClient.getDB().collection("Donors");
@@ -106,4 +107,32 @@ router.delete("/donors/:id", async (req, res) => {
   res.send(result);
 });
 
+const updateDonationStatus = async () => {
+  try {
+    const donorsToUpdate = await donorsCollection
+      .find({
+        lastDonation: { $exists: true },
+      })
+      .toArray();
+
+    donorsToUpdate.forEach(async (donor) => {
+      const lastDonationDate = new Date(donor.lastDonation);
+      const nextDonationDate = new Date(lastDonationDate);
+      nextDonationDate.setDate(lastDonationDate.getDate() + 100);
+
+      if (new Date() > nextDonationDate) {
+        await donorsCollection.updateOne(
+          { _id: new ObjectId(donor._id) },
+          { $set: { isAbleToDonate: "true" } }
+        );
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+cron.schedule("0 0 * * *", () => {
+  updateDonationStatus();
+});
 module.exports = router;
