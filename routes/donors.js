@@ -11,15 +11,19 @@ const donorsCollection = mongoClient.getDB().collection("Donors");
 const donorLogCollection = mongoClient.getDB().collection("Donor_Log");
 
 router.get("/donor/log", async (req, res) => {
-  const email = req.query.email;
-  const filter = { donorEmail: email };
+  const donorID = req.query.donorId;
+  const donorFilter = { _id: new ObjectId(donorID) };
+  const donationFilter = { donorId: donorID };
 
-  if (email) {
-    const donor = await donorLogCollection
-      .find(filter)
+  if (donorID) {
+    const donor = await donorsCollection.findOne(donorFilter);
+
+    const donations = await donorLogCollection
+      .find(donationFilter)
       .sort({ date: -1 })
       .toArray();
-    return res.send(donor);
+
+    return res.send({ donor, donations });
   }
   const donors = await donorLogCollection.find().sort({ date: -1 }).toArray();
   res.send(donors);
