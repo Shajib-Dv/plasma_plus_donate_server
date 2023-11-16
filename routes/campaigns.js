@@ -9,10 +9,22 @@ const campaignCollections = mongoClient.getDB().collection("Campaigns");
 
 router.get("/campaigns", async (req, res) => {
   const campaignId = req.query.campaignId;
+  const limit = req.query.limit;
   const filter = { _id: new ObjectId(campaignId) };
+
+  const limitInt = parseInt(limit);
 
   if (campaignId) {
     const result = await campaignCollections.findOne(filter);
+    return res.send(result);
+  }
+
+  if (limit) {
+    const result = await campaignCollections
+      .find()
+      .limit(limitInt)
+      .sort({ date: -1 })
+      .toArray();
     return res.send(result);
   }
 

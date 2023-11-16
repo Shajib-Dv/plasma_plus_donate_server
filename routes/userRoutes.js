@@ -31,14 +31,23 @@ router.put("/users/:email", async (req, res) => {
   const user = req.body;
   const email = req.params.email;
   const filter = { email: email };
-  const options = { upsert: true };
+  const options = { upsert: false };
   const updatedUser = {
     $set: {
       ...user,
     },
   };
 
-  const result = await userCollections.updateOne(filter, updatedUser, options);
+  const result = await userCollections.findOneAndUpdate(
+    filter,
+    updatedUser,
+    options
+  );
+
+  if (!result) {
+    return res.send({ status: 200, message: "Couldn't find user !" });
+  }
+
   res.send(result);
 });
 
