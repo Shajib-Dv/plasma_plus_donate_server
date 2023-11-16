@@ -20,7 +20,7 @@ app.use(express.json());
 
 async function run() {
   try {
-    await mongoClient.connect();
+    mongoClient.connect();
 
     app.use("/", articleRoutes);
     app.use("/", bloodRequestRoute);
