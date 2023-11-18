@@ -1,56 +1,17 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "./index.js",
-      "use": "@vercel/node"
-    }
+    { "src": "index.js", "use": "@vercel/node" },
+    { "src": "routes/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "./routes/userRoutes(.*)",
-      "dest": "/users$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/articleRoutes(.*)",
-      "dest": "/article$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/bloodRequest(.*)",
-      "dest": "/blood_request$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/donors(.*)",
-      "dest": "/donor$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/donors(.*)",
-      "dest": "/donors$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/teamMember(.*)",
-      "dest": "/team_member$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/campaigns(.*)",
-      "dest": "/campaigns$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "./routes/gallery(.*)",
-      "dest": "/gallery$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    }
+    { "src": "/users", "dest": "/routes/userRoutes.js" },
+    { "src": "/article", "dest": "/routes/articleRoutes.js" },
+    { "src": "/bloodRequest", "dest": "/routes/bloodRequest.js" },
+    { "src": "/donors", "dest": "/routes/donors.js" },
+    { "src": "/teamMember", "dest": "/routes/teamMember.js" },
+    { "src": "/campaigns", "dest": "/routes/campaigns.js" },
+    { "src": "/gallery", "dest": "/routes/gallery.js" },
+    { "src": "/.*", "dest": "/index.js" }
   ]
 }
