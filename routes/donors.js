@@ -6,11 +6,11 @@ const mongoClient = require("../mongoClient");
 const { ObjectId } = require("mongodb");
 const cron = require("node-cron");
 const getDifferenceOfDate = require("../utils/getDifferenceOfDate");
-
+const cors = require("cors");
 const donorsCollection = mongoClient.getDB().collection("Donors");
 const donorLogCollection = mongoClient.getDB().collection("Donor_Log");
 
-router.get("/donor/log", async (req, res) => {
+router.get("/donor/log", cors(), async (req, res) => {
   const donorID = req.query.donorId;
   const donorFilter = { _id: new ObjectId(donorID) };
   const donationFilter = { donorId: donorID };
@@ -29,7 +29,7 @@ router.get("/donor/log", async (req, res) => {
   res.send(donors);
 });
 
-router.get("/donors/search", async (req, res) => {
+router.get("/donors/search", cors(), async (req, res) => {
   const searchWords = req.query;
   const searchKey = Object.keys(searchWords);
   const filter = {};
@@ -62,7 +62,7 @@ router.get("/donors/search", async (req, res) => {
   }
 });
 
-router.post("/donors", async (req, res) => {
+router.post("/donors", cors(), async (req, res) => {
   const donor = req.body;
   const { lastDonation } = donor;
   const dateDifference = await getDifferenceOfDate(lastDonation);
@@ -77,14 +77,14 @@ router.post("/donors", async (req, res) => {
   res.send(result);
 });
 
-router.post("/donor/log", async (req, res) => {
+router.post("/donor/log", cors(), async (req, res) => {
   const donorInfo = req.body;
 
   const result = await donorLogCollection.insertOne(donorInfo);
   res.send(result);
 });
 
-router.put("/donors/:id", async (req, res) => {
+router.put("/donors/:id", cors(), async (req, res) => {
   const donor = req.body;
   const id = req.params.id;
   const filter = { _id: new ObjectId(id) };
@@ -103,7 +103,7 @@ router.put("/donors/:id", async (req, res) => {
   res.send(result);
 });
 
-router.delete("/donors/:id", async (req, res) => {
+router.delete("/donors/:id", cors(), async (req, res) => {
   const id = req.params.id;
   const filter = { _id: new ObjectId(id) };
 
