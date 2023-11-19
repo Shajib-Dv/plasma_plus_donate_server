@@ -5,21 +5,22 @@ const router = express.Router();
 const mongoClient = require("../mongoClient");
 const { ObjectId } = require("mongodb");
 const cors = require("cors");
+router.use(cors());
 
 const articleCollections = mongoClient.getDB().collection("Articles");
 
-router.get("/article", cors(), async (req, res) => {
-  const article = await articleCollections.find().toArray();
+router.get("/article", async (req, res) => {
+  const article = await articleCollections.find().sort({ date: -1 }).toArray();
   res.send(article);
 });
 
-router.post("/article", cors(), async (req, res) => {
+router.post("/article", async (req, res) => {
   const article = req.body;
   const saveArticle = await articleCollections.insertOne(article);
   res.send(saveArticle);
 });
 
-router.put("/article/:id", cors(), async (req, res) => {
+router.put("/article/:id", async (req, res) => {
   const article = req.body;
   const id = req.params.id;
 
@@ -39,7 +40,7 @@ router.put("/article/:id", cors(), async (req, res) => {
   res.send(saveArticle);
 });
 
-router.delete("/article/:id", cors(), async (req, res) => {
+router.delete("/article/:id", async (req, res) => {
   const id = req.params.id;
   const filter = { _id: new ObjectId(id) };
   const deletedArticle = await articleCollections.deleteOne(filter);

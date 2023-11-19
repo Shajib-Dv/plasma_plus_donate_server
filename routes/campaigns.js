@@ -5,9 +5,11 @@ const router = express.Router();
 const mongoClient = require("../mongoClient");
 const { ObjectId } = require("mongodb");
 const cors = require("cors");
+router.use(cors());
+
 const campaignCollections = mongoClient.getDB().collection("Campaigns");
 
-router.get("/campaigns", cors(), async (req, res) => {
+router.get("/campaigns", async (req, res) => {
   const campaignId = req.query.campaignId;
   const limit = req.query.limit;
   const filter = { _id: new ObjectId(campaignId) };
@@ -35,13 +37,13 @@ router.get("/campaigns", cors(), async (req, res) => {
   res.send(campaigns);
 });
 
-router.post("/campaigns", cors(), async (req, res) => {
+router.post("/campaigns", async (req, res) => {
   const campaign = req.body;
   const result = await campaignCollections.insertOne(campaign);
   res.send(result);
 });
 
-router.delete("/campaigns/:id", cors(), async (req, res) => {
+router.delete("/campaigns/:id", async (req, res) => {
   const id = req.params.id;
   const filter = { _id: new ObjectId(id) };
   const result = await campaignCollections.deleteOne(filter);
